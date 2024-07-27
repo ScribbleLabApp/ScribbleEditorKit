@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "ScribbleEditorKit",
-    platforms: [.macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
+    platforms: [.macOS(.v15), .iOS(.v18), .tvOS(.v18), .watchOS(.v11), .macCatalyst(.v18)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
