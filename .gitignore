@@ -11,3 +11,5 @@ build/
 *.tbd
 *.dylib
 *.a
+.vscode/
+.idea/

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 project(fs VERSION 0.0.1 LANGUAGES C OBJC)
 
 add_library(fs STATIC
-#    fs/src/*.c
+    fs/src/*.c
     fs/src/*.m
     fs/*.h
     fs/include/*.h
