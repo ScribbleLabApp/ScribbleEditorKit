@@ -59,15 +59,32 @@
 #define FS_PERM_600  0600
 #define FS_PERM_666  0666
 
+/**
+ * @enum fs_access_mode_t
+ * @brief Access mode flags for fine-grained permission control
+ * 
+ * This enumeration defines various access modes that can be combined
+ * to create complex permission sets. The values are designed to be
+ * bit-maskable for efficient permission checking.
+ */
 typedef enum {
+    /** No access permissions */
     FS_ACCESS_NONE = 0,
+    /** Read permission bit */
     FS_ACCESS_READ = (1 << 0),
+    /** Write permission bit */
     FS_ACCESS_WRITE = (1 << 1),
+    /** Execute permission bit */
     FS_ACCESS_EXEC = (1 << 2),
+     /** Combined read and write permissions */
     FS_ACCESS_RW = (FS_ACCESS_READ | FS_ACCESS_WRITE),
+    /** Combined read and execute permissions */
     FS_ACCESS_RX = (FS_ACCESS_READ | FS_ACCESS_EXEC),
+    /** Combined write and execute permissions */
     FS_ACCESS_WX = (FS_ACCESS_WRITE | FS_ACCESS_EXEC),
+    /** Full access (read, write, execute) */
     FS_ACCESS_RWX = (FS_ACCESS_RW | FS_ACCESS_EXEC),
+    /** All possible permissions (including special bits) */
     FS_ACCESS_ALL = 0xFFFFFFFF
 } fs_access_mode_t;
 
