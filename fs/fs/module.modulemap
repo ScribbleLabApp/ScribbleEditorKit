@@ -1,0 +1,5 @@
+framework fs {
+    umbrella header "fs.h"
+    export *
+    module * { export * }
+}
