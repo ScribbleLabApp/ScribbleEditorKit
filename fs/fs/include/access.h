@@ -1,5 +1,5 @@
 //
-//  _fs.h
+//  access.h
 //  ScribbleLabApp File System Interface
 //
 //  Copyright (c) 2025 ScribbleLab. All rights reserved.

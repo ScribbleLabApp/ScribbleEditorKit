@@ -38,9 +38,34 @@ FOUNDATION_EXPORT double fsVersionNumber;
 FOUNDATION_EXPORT const unsigned char fsVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <fs/PublicHeader.h>
-#import <fs/_fs.h>
-#import <fs/access.h>
+#pragma mark - A
+#import <fs/netw.h>
+
+#pragma mark - C & Clstr
+#import <fs/cloudstr.h>
+#import <fs/rtc.h>
+
+#pragma mark - Editor Core
 #import <fs/encoding.h>
+#import <fs/format.h>
+#import <fs/interop.h>
+
+#pragma mark - IO
+#import <fs/io.h>
+#import <fs/access.h>
+
+#pragma mark - P
+#import <fs/SCConfig.h>
+#import <fs/SCConfigPraser.h>
+#import <fs/SCState.h>
+#import <fs/SCStatePraser.h>
+
+#pragma mark - SNE & I
+#import <fs/sccomp.h>
+
+#pragma mark - Security
+#import <fs/security.h>
+#import <fs/cyfn.h>
 
 #pragma mark - Utilities
 
@@ -91,4 +116,18 @@ FOUNDATION_EXPORT const unsigned char fsVersionString[];
     #else
         #define FSK_EXPORT
     #endif
+#endif
+
+#ifdef __GNUC__ || __CLANG__
+    #define __fs_deprecated__(fmt, ...) __attribute__((deprecated(fmt))) 
+    #define __fs_unavailable__(fmt, ...) __attribute__((unavailable(fmt)))
+    #define __fs_message__(fmt, ...) __attribute__((message(fmt, ##__VA_ARGS__)))
+#elif defined(_MSC_VER)
+    #define __fs_deprecated__(fmt, ...) __declspec(deprecated(fmt))
+    #define __fs_unavailable__(fmt, ...) 0
+    #define __fs_message__(fmt, ...) __pragma(message(fmt))
+#else 
+    #define __fs_deprecated__(fmt, ...) 0
+    #define __fs_unavailable__(fmt, ...) 0
+    #define __fs_message__(fmt, ...) ((void)0)
 #endif

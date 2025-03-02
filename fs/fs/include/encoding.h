@@ -33,6 +33,11 @@
 #define ENCODING_H
 
 #include <stdint.h>
+#include <fs/fs.h>
+
+#ifndef FS_UNSUPPORTED_ENCODING
+    #define FS_UNSUPPORTED_ENCODING(name) ((void)("[WARN]: " name " encoding is not supported on this platform "))
+#endif
 
 /* Line Endings */
 #define FS_EOL_LF   "\n"
@@ -88,25 +93,109 @@ typedef enum {
 #define FS_ENC_F_BOM           (1 << 0)
 #define FS_ENC_F_BINARY        (1 << 1)
 #define FS_ENC_F_MIXED_EOL     (1 << 2)
+
 #define FS_ENC_F_VALID_UTF8    (1 << 3)
-#define FS_ENC_F_VALID_UTF16LE (1 << 4)
-#define FS_ENC_F_VALID_UTF16BE (1 << 5)
-#define FS_ENC_F_VALID_UTF32LE (1 << 6)
-#define FS_ENC_F_VALID_UTF32BE (1 << 7)
-#define FS_ENC_F_VALID_ASCII   (1 << 8)
-#define FS_ENC_F_VALID_ISO_8859_1 (1 << 9)
-#define FS_ENC_F_VALID_WIN_1252   (1 << 10)
-#define FS_ENC_F_VALID_MAC_ROMAN  (1 << 11)
-#define FS_ENC_F_VALID_EBCDIC     (1 << 12)
+#define FS_ENC_F_VALID_ASCII   (1 << 4)
+
+#ifdef _WIN32
+    #define FS_ENC_F_VALID_UTF16LE  (1 << 5)
+    #define FS_ENC_F_VALID_UTF16BE  (1 << 6)
+    #define FS_ENC_F_VALID_UTF32LE  (1 << 7)
+    #define FS_ENC_F_VALID_UTF32BE  (1 << 8)
+    #define FS_ENC_F_VALID_WIN_1252 (1 << 9)
+#endif
+
+#ifdef __APPLE__
+    #define FS_ENC_F_VALID_UTF16LE  (1 << 5)
+    #define FS_ENC_F_VALID_UTF16BE  (1 << 6)
+    #define FS_ENC_F_VALID_UTF32LE  (1 << 7)
+    #define FS_ENC_F_VALID_UTF32BE  (1 << 8)
+    #define FS_ENC_F_VALID_MAC_ROMAN  (1 << 11)
+#endif
+
+#if defined(__unix__) || defined(__linux__)
+    #define FS_ENC_F_VALID_UTF16LE  (1 << 5)
+    #define FS_ENC_F_VALID_UTF16BE  (1 << 6)
+    #define FS_ENC_F_VALID_UTF32LE  (1 << 7)
+    #define FS_ENC_F_VALID_UTF32BE  (1 << 8)
+    #define FS_ENC_F_VALID_ISO_8859_1 (1 << 9)
+#endif
+
+#ifndef FS_ENC_F_VALID_UTF16LE
+    #define FS_ENC_F_VALID_UTF16LE (__fs_unavailable__("UTF-16LE is not supported on this platform"), 0)
+#endif
+#ifndef FS_ENC_F_VALID_UTF16BE
+    #define FS_ENC_F_VALID_UTF16BE (__fs_unavailable__("UTF-16BE is not supported on this platform"), 0)
+#endif
+#ifndef FS_ENC_F_VALID_UTF32LE
+    #define FS_ENC_F_VALID_UTF32LE (__fs_unavailable__("UTF-32LE is not supported on this platform"), 0)
+#endif
+#ifndef FS_ENC_F_VALID_UTF32BE
+    #define FS_ENC_F_VALID_UTF32BE (__fs_unavailable__("UTF-32BE is not supported on this platform"), 0)
+#endif
+#ifndef FS_ENC_F_VALID_ISO_8859_1
+    #define FS_ENC_F_VALID_ISO_8859_1 (__fs_unavailable__("ISO-8859-1 is not supported on this platform"), 0)
+#endif
+#ifndef FS_ENC_F_VALID_WIN_1252
+    #define FS_ENC_F_VALID_WIN_1252 (__fs_unavailable__("Windows-1252 is not supported on this platform"), 0)
+#endif
+#ifndef FS_ENC_F_VALID_MAC_ROMAN
+    #define FS_ENC_F_VALID_MAC_ROMAN (__fs_unavailable__("MacRoman is not supported on this platform"), 0)
+#endif
+#ifndef FS_ENC_F_VALID_EBCDIC
+    #define FS_ENC_F_VALID_EBCDIC (__fs_unavailable__("EBCDIC is not supported on this platform"), 0)
+#endif
 
 #define FS_IS_UTF8(enc)      ((enc) & FS_ENC_F_VALID_UTF8)
 #define FS_IS_UTF16(enc)     ((enc) & (FS_ENC_F_VALID_UTF16LE | FS_ENC_F_VALID_UTF16BE))
 #define FS_IS_UTF32(enc)     ((enc) & (FS_ENC_F_VALID_UTF32LE | FS_ENC_F_VALID_UTF32BE))
 #define FS_IS_ASCII(enc)      ((enc) & FS_ENC_F_VALID_ASCII)
-#define FS_IS_ISO_8859_1(enc) ((enc) & FS_ENC_F_VALID_ISO_8859_1)
-#define FS_IS_WIN_1252(enc)   ((enc) & FS_ENC_F_VALID_WIN_1252)
-#define FS_IS_MAC_ROMAN(enc)  ((enc) & FS_ENC_F_VALID_MAC_ROMAN)
-#define FS_IS_EBCDIC(enc)     ((enc) & FS_ENC_F_VALID_EBCDIC)
+
+#ifdef _WIN32
+    #define FS_IS_UTF16(enc)     ((enc) & (FS_ENC_F_VALID_UTF16LE | FS_ENC_F_VALID_UTF16BE))
+    #define FS_IS_WIN_1252(enc)  ((enc) & FS_ENC_F_VALID_WIN_1252)
+    #define FS_IS_UTF32(enc)     (__fs_unavailable__("UTF-32 is not supported on Windows"), 0)
+    #define FS_IS_ISO_8859_1(enc) (__fs_unavailable__("ISO-8859-1 is not supported on Windows"), 0)
+    #define FS_IS_MAC_ROMAN(enc)  (__fs_unavailable__("MacRoman is not supported on Windows"), 0)
+    #define FS_IS_EBCDIC(enc)     (__fs_unavailable__("EBCDIC is not supported on Windows"), 0)
+#endif
+
+#ifdef __APPLE__
+    #define FS_IS_UTF16(enc)     ((enc) & (FS_ENC_F_VALID_UTF16LE | FS_ENC_F_VALID_UTF16BE))
+    #define FS_IS_MAC_ROMAN(enc) ((enc) & FS_ENC_F_VALID_MAC_ROMAN)
+    #define FS_IS_UTF32(enc)     (__fs_unavailable__("UTF-32 is not supported on macOS"), 0)
+    #define FS_IS_ISO_8859_1(enc) (__fs_unavailable__("ISO-8859-1 is not supported on macOS"), 0)
+    #define FS_IS_WIN_1252(enc)   (__fs_unavailable__("Windows-1252 is not supported on macOS"), 0)
+    #define FS_IS_EBCDIC(enc)     (__fs_unavailable__("EBCDIC is not supported on macOS"), 0)
+#endif
+
+#if defined(__unix__) || defined(__linux__)
+    #define FS_IS_UTF16(enc)      ((enc) & (FS_ENC_F_VALID_UTF16LE | FS_ENC_F_VALID_UTF16BE))
+    #define FS_IS_ISO_8859_1(enc) ((enc) & FS_ENC_F_VALID_ISO_8859_1)
+    #define FS_IS_UTF32(enc)      (__fs_unavailable__("UTF-32 is not supported on Unix/Linux"), 0)
+    #define FS_IS_WIN_1252(enc)   (__fs_unavailable__("Windows-1252 is not supported on Unix/Linux"), 0)
+    #define FS_IS_MAC_ROMAN(enc)  (__fs_unavailable__("MacRoman is not supported on Unix/Linux"), 0)
+    #define FS_IS_EBCDIC(enc)     (__fs_unavailable__("EBCDIC is not supported on Unix/Linux"), 0)
+#endif
+
+#ifndef FS_IS_UTF16
+    #define FS_IS_UTF16(enc)      (__fs_unavailable__("UTF-16 is not supported on this platform"), 0)
+#endif
+#ifndef FS_IS_UTF32
+    #define FS_IS_UTF32(enc)      (__fs_unavailable__("UTF-32 is not supported on this platform"), 0)
+#endif
+#ifndef FS_IS_ISO_8859_1
+    #define FS_IS_ISO_8859_1(enc) (__fs_unavailable__("ISO-8859-1 is not supported on this platform"), 0)
+#endif
+#ifndef FS_IS_WIN_1252
+    #define FS_IS_WIN_1252(enc)   (__fs_unavailable__("Windows-1252 is not supported on this platform"), 0)
+#endif
+#ifndef FS_IS_MAC_ROMAN
+    #define FS_IS_MAC_ROMAN(enc)  (__fs_unavailable__("MacRoman is not supported on this platform"), 0)
+#endif
+#ifndef FS_IS_EBCDIC
+    #define FS_IS_EBCDIC(enc)     (__fs_unavailable__("EBCDIC is not supported on this platform"), 0)
+#endif
 
 typedef struct {
     fs_enc_t encoding;

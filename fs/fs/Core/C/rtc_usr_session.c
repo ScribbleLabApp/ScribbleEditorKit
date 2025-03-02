@@ -1,6 +1,6 @@
 //
-//  FSManager.h
-//  ScribbleLabApp File System Interface
+//  rtc_usr_session.c
+//  ScribbleLabApp Real-time Collaboration Cloud Sync
 //
 //  Copyright (c) 2025 ScribbleLab. All rights reserved.
 //
@@ -28,43 +28,3 @@
 //  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-#import <Foundation/Foundation.h>
-
-NS_ASSUME_NONNULL_BEGIN
-
-@interface FSManager : NSObject
-
-+ (instancetype)sharedManager;
-
-- (BOOL)fileExistsAtPath:(NSString *)path;
-- (NSData * _Nullable)readFileAtPath:(NSString *)path;
-- (BOOL)writeData:(NSData *)data toFileAtPath:(NSString *)path;
-- (BOOL)appendData:(NSData *)data toFileAtPath:(NSString *)path;
-- (BOOL)deleteFileAtPath:(NSString *)path;
-- (BOOL)moveFileFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
-- (BOOL)copyFileFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
-
-- (NSArray<NSString *> * _Nullable)listFilesInDirectoryAtPath:(NSString *)path;
-- (BOOL)createDirectoryAtPath:(NSString *)path;
-- (BOOL)deleteDirectoryAtPath:(NSString *)path;
-- (BOOL)moveDirectoryFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
-- (BOOL)copyDirectoryFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
-
-- (fsFileType)fileTypeAtPath:(NSString *)path;
-- (nullable fsFileAttributes *)fileAttributesAtPath:(NSString *)path;
-
-- (BOOL)setFilePermissionsAtPath:(NSString *)path mode:(mode_t)mode;
-- (mode_t)getFilePermissionsAtPath:(NSString *)path;
-- (BOOL)isReadableAtPath:(NSString *)path;
-- (BOOL)isWritableAtPath:(NSString *)path;
-- (BOOL)isExecutableAtPath:(NSString *)path;
-
-- (nullable NSString *)fileExtensionAtPath:(NSString *)path;
-- (nullable NSString *)fileNameAtPath:(NSString *)path;
-- (nullable NSString *)fileNameWithoutExtensionAtPath:(NSString *)path;
-- (nullable NSString *)parentDirectoryAtPath:(NSString *)path;
-
-@end
-
-NS_ASSUME_NONNULL_END

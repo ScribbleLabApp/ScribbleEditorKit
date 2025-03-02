@@ -30,6 +30,23 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
 				fs.h,
+				include/access.h,
+				include/cloudstr.h,
+				include/cyfn.h,
+				include/encoding.h,
+				include/format.h,
+				include/fslog.h,
+				include/interop.h,
+				include/io.h,
+				include/multimedia.h,
+				include/netw.h,
+				include/rtc.h,
+				include/sccomp.h,
+				include/security.h,
+				P/SCConfig/SCConfig.h,
+				P/SCConfig/SCConfigParser.h,
+				P/SCState/SCState.h,
+				P/SCState/SCStateParser.h,
 			);
 			target = 38BC781E2D4FE4BD00E09F7F /* fs */;
 		};
